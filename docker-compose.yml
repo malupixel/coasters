@@ -1,0 +1,89 @@
+version: '3.7'
+services:
+#  bluebinary_mysql:
+#    image: mariadb:10.10.2
+#    container_name: bluebinary_mysql
+#    ports:
+#      - "5307:3306"
+#    environment:
+#      MYSQL_ROOT_PASSWORD: root
+#      MYSQL_DATABASE: bluebinary
+#      MYSQL_USER: bluebinary
+#      MYSQL_PASSWORD: 123
+#    volumes:
+#      - ./data/mysql:/var/lib/mysql
+#    networks:
+#      bluebinary:
+#        ipv4_address: 172.63.0.3
+  bluebinary_php:
+    build:
+      context: docker/php8.2-fpm
+      args:
+        TIMEZONE: "Europe/Warsaw"
+        USER_ID: 1000
+        GROUP_ID: 1000
+    user: 1000:1000
+    container_name: bluebinary_php
+    environment:
+      - CI_ENVIRONMENT=development
+    ports:
+      - "9063:9063"
+    volumes:
+      - ./:/var/www/bluebinary:cached
+      - ./docker/logs/bluebinary:/var/logs:cached
+      - ./var/data:/var/data:cached
+    links:
+#      - bluebinary_mysql
+      - bluebinary_redis
+    extra_hosts:
+      - "docker-host.localhost:127.0.0.1"
+    networks:
+      bluebinary:
+        ipv4_address: 172.63.0.2
+  bluebinary_nginx:
+    build: docker/nginx
+    container_name: bluebinary_nginx
+    ports:
+      - "8089:8089"
+      - "9079:443"
+    links:
+      - bluebinary_php
+    volumes:
+      - ./docker/logs/nginx:/var/logs/nginx:cached
+      - ./:/var/www/bluebinary:cached
+    networks:
+      bluebinary:
+        ipv4_address: 172.63.0.4
+        aliases:
+          - docs.localhost
+  bluebinary_mailhog:
+    image: mailhog/mailhog:latest
+    container_name: bluebinary_mailhog
+    ports:
+      - "8025:8025" # Interfejs web Mailhog
+      - "1025:1025" # SMTP
+    restart: unless-stopped
+    networks:
+      bluebinary:
+        ipv4_address: 172.63.0.5
+  bluebinary_redis:
+    image: redis:7.0
+    container_name: bluebinary_redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    command: ["redis-server", "--appendonly", "yes"]
+    networks:
+      bluebinary:
+        ipv4_address: 172.63.0.6
+
+networks:
+  bluebinary:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.63.0.0/24
+
+volumes:
+  redis-data:
