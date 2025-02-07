@@ -1,0 +1,186 @@
+{
+	"info": {
+		"_postman_id": "6efc92c1-916e-4f83-8b70-a4c0cb046646",
+		"name": "Bluebinary",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "18957554"
+	},
+	"item": [
+		{
+			"name": "Coaster - GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}:{{port}}/api/coasters"
+			},
+			"response": []
+		},
+		{
+			"name": "Coaster - GET ONE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}:{{port}}/api/coasters/1"
+			},
+			"response": []
+		},
+		{
+			"name": "Coaster - CREATE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": null,\n    \"workersCount\": 7,\n    \"personsCount\": 2300,\n    \"length\": 1900,\n    \"from\": \"10:00\",\n    \"to\": \"18:00\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/coasters"
+			},
+			"response": []
+		},
+		{
+			"name": "Coaster - UPDATE",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"workersCount\": 4,\n    \"length\": 1500\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/coasters/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Coaster - DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/coasters/4"
+			},
+			"response": []
+		},
+		{
+			"name": "Wagon - GET",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}:{{port}}/api/wagons"
+			},
+			"response": []
+		},
+		{
+			"name": "Wagon - GET ONE",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": "{{base_url}}:{{port}}/api/wagons/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Wagon - CREATE",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": null,\n    \"coasterId\": 4,\n    \"places\": 6,\n    \"speed\": 28\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/wagons"
+			},
+			"response": []
+		},
+		{
+			"name": "Wagon - UPDATE",
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"places\": 4,\n    \"speed\": 26\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/wagons/2"
+			},
+			"response": []
+		},
+		{
+			"name": "Wagon - DELETE",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "{{base_url}}:{{port}}/api/wagons/4"
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "port",
+			"value": "9079",
+			"type": "string"
+		},
+		{
+			"key": "base_url",
+			"value": "https://localhost",
+			"type": "string"
+		}
+	]
+}
