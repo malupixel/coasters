@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Dto;
 
+use CodeIgniter\I18n\TimeDifference;
+
 final class CoasterDto extends BaseDto
 {
     protected array $updatable = [
@@ -12,6 +14,11 @@ final class CoasterDto extends BaseDto
     protected array $serialized = [
         'id', 'workersCount', 'personsCount', 'length', 'from', 'to'
     ];
+
+    /**
+     * @var array|WagonDto[]
+     */
+    protected array $wagons = [];
 
     public function __construct(
         ?int $id,
@@ -47,6 +54,43 @@ final class CoasterDto extends BaseDto
     public function getTo(): string
     {
         return $this->to;
+    }
+
+    public function getOpenDuration(): int
+    {
+        try {
+            $operationTime = (new TimeDifference(new \DateTime($this->from), new \DateTime($this->to)))->getSeconds();
+        } catch (\Exception $e) {
+            $operationTime = 0;
+        }
+        return $operationTime;
+    }
+
+    public function getNumberOfWagons(): int
+    {
+        return count($this->wagons);
+    }
+
+    /**
+     * @return array|WagonDto[]
+     */
+    public function getWagons(): array
+    {
+        return $this->wagons;
+    }
+
+    /**
+     * @param array|WagonDto[] $wagons
+     * @return void
+     */
+    public function setWagons(array $wagons): void
+    {
+        $this->wagons = $wagons;
+    }
+
+    public function withWagons(): self
+    {
+        return $this;
     }
 
     public static function buildFromJSON(string $json): CoasterDto

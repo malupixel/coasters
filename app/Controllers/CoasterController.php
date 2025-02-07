@@ -64,7 +64,8 @@ final class CoasterController extends BaseController
                 ;
         }
 
-        $this->coasterRepository->create($coasterDto);
+        $createdCoaster = $this->coasterRepository->create($coasterDto);
+        $this->checkData($createdCoaster->getId());
 
         return $this->response
             ->setStatusCode(ResponseInterface::HTTP_CREATED)
@@ -91,6 +92,7 @@ final class CoasterController extends BaseController
         $body = $this->request->getJSON(true);
         $coasterDto->update($body);
         $this->coasterRepository->update($coasterDto);
+        $this->checkData($id);
 
         return $this->response->setJSON($coasterDto->toArray());
 
@@ -115,6 +117,7 @@ final class CoasterController extends BaseController
         $result = $this->coasterRepository->delete($id);
         if ($result) {
             $this->wagonRepository->deleteByCoastId($id);
+            $this->checkData($id);
         }
 
         $response = $this->response->setJSON([]);

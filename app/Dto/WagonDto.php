@@ -5,6 +5,8 @@ namespace App\Dto;
 
 final class WagonDto extends BaseDto
 {
+    const WAGON_BREAK_DURATION = 300;
+
     protected array $updatable = ['places', 'speed'];
     protected array $serialized = ['id', 'coasterId', 'places', 'speed'];
     public function __construct(
@@ -34,6 +36,17 @@ final class WagonDto extends BaseDto
     public function getSpeed(): float
     {
         return $this->speed;
+    }
+
+    public function getMaxDailyClients(int $trackLength, int $duration): ?int
+    {
+        $courseTime = $trackLength / $this->speed;
+        $maxCourses = floor($duration / $courseTime);
+        while (($maxCourses * ($courseTime + self::WAGON_BREAK_DURATION)) - self::WAGON_BREAK_DURATION > $duration) {
+            $maxCourses--;
+        }
+
+        return (int)$maxCourses * $this->places;
     }
 
     public static function buildFromJSON(string $json): self

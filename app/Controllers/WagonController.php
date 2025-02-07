@@ -10,7 +10,7 @@ use App\Repositories\WagonRepository;
 use App\Repositories\WagonRepositoryInterface;
 use CodeIgniter\HTTP\ResponseInterface;
 
-class WagonController extends BaseController
+final class WagonController extends BaseController
 {
     private readonly WagonRepositoryInterface $wagonRepository;
     private readonly CoasterRepository $coasterRepository;
@@ -65,7 +65,8 @@ class WagonController extends BaseController
                 ;
         }
 
-        $this->wagonRepository->create($wagonDto);
+        $createdWagon = $this->wagonRepository->create($wagonDto);
+        $this->checkData($createdWagon->getCoasterId());
 
         return $this->response
             ->setStatusCode(ResponseInterface::HTTP_CREATED)
@@ -92,6 +93,7 @@ class WagonController extends BaseController
         $body = $this->request->getJSON(true);
         $wagonDto->update($body);
         $this->wagonRepository->update($wagonDto);
+        $this->checkData($wagonDto->getCoasterId());
 
         return $this->response->setJSON($wagonDto->toArray());
 
@@ -114,6 +116,7 @@ class WagonController extends BaseController
         }
 
         $result = $this->wagonRepository->delete($id);
+        $this->checkData($wagonDto->getCoasterId());
 
         $response = $this->response->setJSON([]);
 

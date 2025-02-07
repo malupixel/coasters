@@ -19,5 +19,10 @@ interface WagonRepositoryInterface
 
     public function delete(int $id): bool;
 
-    public function deleteByCoastId(int $coastId): int;
+    /**
+     * @return array|WagonDto[]
+     */
+    public function getByCoasterId(int $coasterId): array;
+
+    public function deleteByCoastId(int $coasterId): int;
 }

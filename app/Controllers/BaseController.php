@@ -2,6 +2,10 @@
 
 namespace App\Controllers;
 
+use App\Services\ClientsValidator;
+use App\Services\CoastersValidator;
+use App\Services\DataChecker;
+use App\Services\WorkersValidator;
 use CodeIgniter\Controller;
 use CodeIgniter\HTTP\CLIRequest;
 use CodeIgniter\HTTP\IncomingRequest;
@@ -54,5 +58,14 @@ abstract class BaseController extends Controller
         // Preload any models, libraries, etc, here.
 
         // E.g.: $this->session = service('session');
+    }
+
+    protected function checkData(int $coasterId): void
+    {
+        DataChecker::init([
+            CoastersValidator::class,
+//            WorkersValidator::class,
+//            ClientsValidator::class,
+        ])->check($coasterId);
     }
 }

@@ -19,4 +19,9 @@ abstract class BaseRepository
     {
         return getenv('CI_ENVIRONMENT') . '-' . $this->prefix;
     }
+
+    protected function getNextId(): int
+    {
+        return $this->redis->getNextId($this->buildPrefix());
+    }
 }

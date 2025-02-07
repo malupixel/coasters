@@ -37,7 +37,7 @@ final class WagonRepository extends BaseRepository implements WagonRepositoryInt
     public function create(WagonDto $wagonDto): WagonDto
     {
         if ($wagonDto->getId() === null) {
-            $wagonDto->setId( $this->redis->getNextId($this->buildPrefix()));
+            $wagonDto->setId($this->getNextId());
         }
         $this->redis->set($this->buildPrefix().$wagonDto->getId(), (string)$wagonDto);
 
@@ -56,12 +56,12 @@ final class WagonRepository extends BaseRepository implements WagonRepositoryInt
         return $this->redis->remove($this->buildPrefix() . $id);
     }
 
-    public function deleteByCoastId(int $coastId): int
+    public function deleteByCoastId(int $coasterId): int
     {
         $removed = 0;
         $wagons = $this->getAll();
         foreach ($wagons as $wagon) {
-            if ($wagon->getCoasterId() === $coastId) {
+            if ($wagon->getCoasterId() === $coasterId) {
                 if ($this->delete($wagon->getId())) {
                     $removed++;
                 }
@@ -69,5 +69,18 @@ final class WagonRepository extends BaseRepository implements WagonRepositoryInt
         }
 
         return $removed;
+    }
+
+    public function getByCoasterId(int $coasterId): array
+    {
+        $result = [];
+        $wagons = $this->getAll();
+        foreach ($wagons as $wagon) {
+            if ($wagon->getCoasterId() === $coasterId) {
+                $result[] = $wagon;
+            }
+        }
+
+        return $result;
     }
 }

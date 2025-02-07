@@ -6,6 +6,7 @@ final class Redis
 {
     private \Redis $redis;
 
+
     public function __construct()
     {
         $this->redis = new \Redis();
@@ -29,7 +30,7 @@ final class Redis
 
     public function getByPrefix(string $prefix): array
     {
-        $keys =  $this->redis->scan($i, $prefix.'*');
+        $keys =  $this->redis->scan($i, $prefix.'*', 1000);
         if ($keys !== false) {
             $coasters = $this->redis->mget($keys);
             if (is_array($coasters)) {
@@ -49,7 +50,7 @@ final class Redis
 
     public function getNextId(string $prefix): int
     {
-        $keys =  $this->redis->scan($i, $prefix.'*');
+        $keys =  $this->redis->scan($i, $prefix.'*', 1000);
         $ids = array_map(function ($key) {
             return explode('-', $key)[2];
         }, $keys);

@@ -3,11 +3,10 @@ declare(strict_types=1);
 
 namespace App\Commands;
 
-use App\Services\WorkersValidator;
+use App\Services\Monitor;
 use CodeIgniter\CLI\BaseCommand;
-use CodeIgniter\CLI\CLI;
 
-final class WorkersValidation extends BaseCommand
+final class ValidationMonitor extends BaseCommand
 {
     /**
      * The Command's Group
@@ -21,21 +20,21 @@ final class WorkersValidation extends BaseCommand
      *
      * @var string
      */
-    protected $name = 'validate:workers';
+    protected $name = 'validate:monitor';
 
     /**
      * The Command's Description
      *
      * @var string
      */
-    protected $description = 'Validate number of workers';
+    protected $description = 'Display validation information';
 
     /**
      * The Command's Usage
      *
      * @var string
      */
-    protected $usage = 'command:name [arguments] [options]';
+    protected $usage = 'validate:monitor [arguments] [options]';
 
     /**
      * The Command's Arguments
@@ -56,9 +55,8 @@ final class WorkersValidation extends BaseCommand
      *
      * @param array $params
      */
-    public function run(array $params)
+    public function run(array $params): void
     {
-        $workersValidator = new WorkersValidator();
-        $workersValidator->validate();
+        Monitor::getInstance()->start();
     }
 }

@@ -3,24 +3,20 @@ declare(strict_types=1);
 
 namespace App\Services;
 
-use App\Repositories\CoasterRepository;
-use App\Repositories\CoasterRepositoryInterface;
-use App\Repositories\WagonRepository;
-use App\Repositories\WagonRepositoryInterface;
+use App\Dto\CoasterDto;
 
-final class WorkersValidator
+final class WorkersValidator extends BaseValidator implements ValidatorInterface
 {
-    private readonly CoasterRepositoryInterface $coasterRepository;
-    private readonly WagonRepositoryInterface $wagonRepository;
+    protected string $validatorName = 'workers';
 
-    public function __construct()
+    public function validate(CoasterDto $coasterDto): void
     {
-        $this->coasterRepository = new CoasterRepository();
-        $this->wagonRepository = new WagonRepository();
-    }
-
-    public function validate(): void
-    {
-        dd('VALIDATE');
+        $workersCount = $coasterDto->getWorkersCount() - ($coasterDto->getNumberOfWagons() * 2 + 1);
+        if ($workersCount !== 0) {
+            $this->result = $workersCount > 0
+                ? ['Kolejka ID ' . $coasterDto->getId() . ': Liczba nadmiarowych pracowników - ' . abs($workersCount)]
+                : ['Kolejka ID ' . $coasterDto->getId() . ': Liczba brakujacych pracownikow - ' . abs($workersCount)];
+                ;
+        }
     }
 }
